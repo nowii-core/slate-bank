@@ -54,6 +54,7 @@ With no build system required for basic development, Slate provides a simple sta
   <img src="screenshot.png" alt="Slate application preview" width="900">
 </p>
 
+> **Live Demo:** https://nowii-core.github.io/slate-bank/slate-bank/
 ---
 
 ## Tech Stack
