@@ -8,9 +8,6 @@ A clean web experience powered by vanilla HTML, CSS, and JavaScript, with Progre
 
 <p>
   <img src="https://img.shields.io/badge/Stack-HTML%20%7C%20CSS%20%7C%20JavaScript-2563eb?style=for-the-badge" alt="Technology Stack">
-  <img src="https://img.shields.io/badge/Dependencies-0-success?style=for-the-badge" alt="Zero Dependencies">
-  <img src="https://img.shields.io/badge/PWA-Enabled-5a0fc8?style=for-the-badge" alt="PWA">
-  <img src="https://img.shields.io/badge/Platform-Cross--Platform-111827?style=for-the-badge" alt="Cross Platform">
 </p>
 
 <p>
@@ -164,17 +161,6 @@ Slate is designed to be easy to work with using a minimal development setup.
 4. Refresh the browser to test your changes.
 5. Verify responsive layouts and offline behavior.
 
-### Suggested Improvements
-
-Potential directions for future development:
-
-- [ ] Improve accessibility and keyboard navigation.
-- [ ] Refine offline caching and update handling.
-- [ ] Optimize loading performance.
-- [ ] Expand responsive layout options.
-- [ ] Add automated testing.
-- [ ] Improve installation and PWA experience.
-
 ---
 
 ## Security & Privacy
@@ -203,9 +189,6 @@ If you intend to distribute Slate as an open-source project, add a `LICENSE` fil
 
 <div align="center">
 
-**Slate**
-
-Built with simplicity and purpose.
 
 <sub>Developed by <a href="https://github.com/nowii-core"><b>nowii-core</b></a></sub>
 
