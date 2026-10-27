@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slate | Premium Banking</title>
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOGIN / REGISTER -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span>Slate</span>
+    </div>
+    <div id="login-form">
+      <label class="field"><span>Email</span><input type="email" id="loginEmail" value="mario@example.com"></label>
+      <label class="field"><span>Password</span><input type="password" id="loginPass" value="password123"></label>
+      <button class="btn-primary" onclick="doLogin()">Accedi al conto</button>
+      <div class="auth-switch">Non hai un account? <button onclick="toggleAuth()">Registrati</button></div>
+    </div>
+    <div id="register-form" style="display:none">
+      <label class="field"><span>Nome completo</span><input type="text" id="regName" placeholder="Mario Rossi"></label>
+      <label class="field"><span>Email</span><input type="email" id="regEmail" placeholder="mario@example.com"></label>
+      <label class="field"><span>Password</span><input type="password" id="regPass" placeholder="••••••••"></label>
+      <button class="btn-primary" onclick="doRegister()">Crea Account</button>
+      <div class="auth-switch">Hai già un account? <button onclick="toggleAuth()">Accedi</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP PRINCIPALE -->
+<div id="app">
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Slate
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-page="home">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-page="cards">
+          <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Le tue Carte</span>
+        </button>
+        <button class="nav-item" data-page="analytics">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span>
+        </button>
+        <button class="nav-item" data-page="exchange">
+          <svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><span>Cambio Valuta</span>
+        </button>
+        <button class="nav-item" data-page="profile">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Impostazioni</span>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-mini" onclick="navigate('profile')">
+          <div class="avatar" id="sideAvatar">MR</div>
+          <div>
+            <div style="font-weight:600;font-size:14px" id="sideName">Mario Rossi</div>
+            <div style="font-size:12px;color:var(--text-secondary)">Account Premium</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- DASHBOARD -->
+      <section class="page active" id="page-home">
+        <header class="page-header">
+          <div>
+            <h1>Buongiorno, <span id="greetName">Mario</span></h1>
+            <p class="muted" style="margin-top:4px">Ecco il riepilogo del tuo conto.</p>
+          </div>
+          <button class="qa-btn" onclick="showToast('Nessuna nuova notifica', 'info')" style="padding:12px; border-radius:50%;">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </button>
+        </header>
+        
+        <div class="balance-card">
+          <div class="balance-label">Saldo disponibile (EUR)</div>
+          <div class="balance-amount" id="mainBalance">€0.00</div>
+          <div class="quick-actions">
+            <button class="qa-btn" onclick="openModal('send')"><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>Invia</button>
+            <button class="qa-btn" onclick="openModal('request')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>Richiedi</button>
+            <button class="qa-btn" onclick="openModal('topup')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Ricarica</button>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+          <h2 style="font-size:18px;font-weight:700">Transazioni Recenti</h2>
+          <button class="muted" onclick="navigate('analytics')" style="font-size:14px;font-weight:600">Vedi tutto</button>
+        </div>
+        <div class="tx-list" id="recentTxList"></div>
+      </section>
+
+      <!-- CARDS -->
+      <section class="page" id="page-cards">
+        <header class="page-header"><h1>Le tue Carte</h1></header>
+        
+        <div class="card-scene">
+          <div class="credit-card-3d" id="virtualCard" onclick="toggleCardFlip(event)">
+            <div class="cc-face cc-front">
+              <div class="cc-top"><div class="cc-logo">Slate</div><div class="cc-network">VISA</div></div>
+              <div class="cc-chip"></div>
+              <div class="cc-number" id="ccNumber">•••• •••• •••• 4821</div>
+              <div class="cc-bottom">
+                <div><div class="cc-label">TITOLARE</div><div class="cc-value" id="ccHolder">MARIO ROSSI</div></div>
+                <div><div class="cc-label">SCADENZA</div><div class="cc-value">12/27</div></div>
+              </div>
+            </div>
+            <div class="cc-face cc-back">
+              <div class="cc-stripe"></div>
+              <div class="cc-cvv"><span id="ccCvv">•••</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap;">
+          <button class="qa-btn" onclick="toggleFreeze()" id="btnFreeze">
+            <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg> Congela Carta
+          </button>
+          <button class="qa-btn" onclick="toggleReveal()" id="btnReveal">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Mostra Dati
+          </button>
+        </div>
+      </section>
+
+      <!-- ANALYTICS -->
+      <section class="page" id="page-analytics">
+        <header class="page-header"><h1>Analytics</h1></header>
+        
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Entrate Totali (Mese)</div>
+            <div class="kpi-value" style="color:var(--success)">+€4.500,00</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Uscite Totali (Mese)</div>
+            <div class="kpi-value" style="color:var(--danger)">-€1.355,49</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Risparmio Netto</div>
+            <div class="kpi-value">€3.144,51</div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Flusso di cassa</h3>
+            <div class="chart-filters">
+              <button class="filter-btn active" onclick="updateChartPeriod('7D', this)">7G</button>
+              <button class="filter-btn" onclick="updateChartPeriod('1M', this)">1M</button>
+              <button class="filter-btn" onclick="updateChartPeriod('1Y', this)">1A</button>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="spendingChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-container">
+          <div class="chart-header"><h3>Ripartizione spese</h3></div>
+          <div class="chart-wrapper">
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXCHANGE -->
+      <section class="page" id="page-exchange">
+        <header class="page-header"><h1>Cambio Valuta</h1></header>
+        <div style="background:var(--surface-1); padding:32px; border-radius:20px; border:1px solid var(--border); max-width:500px">
+          <div style="display:flex; gap:16px; margin-bottom:24px">
+            <div style="flex:1; background:var(--surface-2); padding:20px; border-radius:16px; border:1px solid var(--border)">
+              <div class="muted" style="font-size:13px; margin-bottom:8px">Saldo EUR</div>
+              <div class="mono" style="font-size:24px; font-weight:700" id="eurBal">€0.00</div>
+            </div>
+            <div style="flex:1; background:var(--surface-2); padding:20px; border-radius:16px; border:1px solid var(--border)">
+              <div class="muted" style="font-size:13px; margin-bottom:8px">Saldo USD</div>
+              <div class="mono" style="font-size:24px; font-weight:700" id="usdBal">$0.00</div>
+            </div>
+          </div>
+          <label class="field"><span>Importo da convertire (EUR)</span><input type="number" id="exAmount" placeholder="0.00"></label>
+          <button class="btn-primary" onclick="doExchange()">Converti a USD</button>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" id="page-profile">
+        <header class="page-header"><h1>Impostazioni</h1></header>
+        
+        <div class="profile-header-card">
+          <!-- AREA CLICCABILE PER CARICARE LA FOTO -->
+          <div class="avatar-upload-container" onclick="document.getElementById('avatarUpload').click()">
+            <div class="avatar" id="profAvatar">MR</div>
+            <div class="avatar-overlay">
+              <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+          </div>
+          <!-- INPUT NASCOSTO PER LA FOTO -->
+          <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+          
+          <div class="profile-info">
+            <h2 id="profName">Mario Rossi</h2>
+            <p id="profEmail">mario@example.com</p>
+            <span class="badge-premium">Account Premium</span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Account</div>
+          <div class="setting-row" onclick="openModal('editProfile')">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <span class="setting-text">Dati Personali</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="setting-row" onclick="copyIBAN()">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <span class="setting-text">Dettagli Conto (IBAN)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="setting-value">IT60...1234</span>
+              <svg class="chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+              <span class="setting-text">Valuta Principale</span>
+            </div>
+            <span class="setting-value">EUR (€)</span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Sicurezza e Privacy</div>
+          <div class="setting-row">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              <span class="setting-text">Face ID / Touch ID</span>
+            </div>
+            <div class="toggle-switch" id="toggle-faceid" onclick="toggleSetting('faceId', this)"></div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <span class="setting-text">Autenticazione a 2 Fattori</span>
+            </div>
+            <div class="toggle-switch" id="toggle-2fa" onclick="toggleSetting('twoFactor', this)"></div>
+          </div>
+          <div class="setting-row" onclick="openModal('password')">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg></div>
+              <span class="setting-text">Cambia Password</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Preferenze</div>
+          <div class="setting-row">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+              <span class="setting-text">Notifiche Push</span>
+            </div>
+            <div class="toggle-switch" id="toggle-push" onclick="toggleSetting('push', this)"></div>
+          </div>
+          <div class="setting-row" onclick="showToast('Lingua impostata su Italiano')">
+            <div class="setting-row-left">
+              <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M5 8l6 6"/><path d="M4 14h6"/><path d="M2 18h20"/><path d="M15 4v2"/><path d="M15 8v2"/><path d="M18 4v2"/><path d="M19 7v2"/><path d="M9 2v4"/></svg></div>
+              <span class="setting-text">Lingua</span>
+            </div>
+            <span class="setting-value">Italiano</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="background:var(--surface-2);color:var(--danger);border:1px solid var(--border); margin-top: 12px;" onclick="doLogout()">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Disconnetti
+        </button>
+      </section>
+    </main>
+  </div>
+  
+  <nav class="bottom-nav">
+    <button class="bn-item active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</button>
+    <button class="bn-item" data-page="cards"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Carte</button>
+    <button class="bn-item" data-page="analytics"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/></svg>Stats</button>
+    <button class="bn-item" data-page="profile"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profilo</button>
+  </nav>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-send">
+  <div class="modal">
+    <div class="modal-header"><h2>Invia Denaro</h2><button class="modal-close" onclick="closeModal('send')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <label class="field"><span>Nome Beneficiario</span><input type="text" id="sendName" placeholder="Es. Luca Bianchi"></label>
+    <label class="field"><span>IBAN / Email</span><input type="text" id="sendIban" placeholder="IT60..."></label>
+    <label class="field"><span>Importo (EUR)</span><input type="number" id="sendAmount" placeholder="0.00"></label>
+    <button class="btn-primary" onclick="executeSend()">Invia Trasferimento</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-request">
+  <div class="modal">
+    <div class="modal-header"><h2>Richiedi Denaro</h2><button class="modal-close" onclick="closeModal('request')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <label class="field"><span>Invia richiesta a</span><input type="text" placeholder="Nome o @username"></label>
+    <label class="field"><span>Importo (EUR)</span><input type="number" id="reqAmount" placeholder="0.00"></label>
+    <label class="field"><span>Nota (opzionale)</span><input type="text" placeholder="Es. Cena di ieri"></label>
+    <button class="btn-primary" onclick="showToast('Richiesta inviata con successo'); closeModal('request')">Invia Richiesta</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-topup">
+  <div class="modal">
+    <div class="modal-header"><h2>Ricarica Conto</h2><button class="modal-close" onclick="closeModal('topup')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <label class="field"><span>Importo (EUR)</span><input type="number" id="topupAmount" placeholder="0.00"></label>
+    <label class="field"><span>Metodo di pagamento</span><select><option>Carta di Credito (**** 4821)</option><option>Bonifico Bancario</option></select></label>
+    <button class="btn-primary" onclick="executeTopup()">Ricarica</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-editProfile">
+  <div class="modal">
+    <div class="modal-header"><h2>Modifica Dati Personali</h2><button class="modal-close" onclick="closeModal('editProfile')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <label class="field"><span>Nome Completo</span><input type="text" id="editName" placeholder="Mario Rossi"></label>
+    <label class="field"><span>Email</span><input type="email" id="editEmail" placeholder="mario@example.com"></label>
+    <button class="btn-primary" onclick="saveProfile()">Salva Modifiche</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-password">
+  <div class="modal">
+    <div class="modal-header"><h2>Cambia Password</h2><button class="modal-close" onclick="closeModal('password')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <label class="field"><span>Vecchia Password</span><input type="password" id="oldPass" placeholder="••••••••"></label>
+    <label class="field"><span>Nuova Password</span><input type="password" id="newPass" placeholder="••••••••"></label>
+    <button class="btn-primary" onclick="savePassword()">Aggiorna Password</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-receipt">
+  <div class="modal">
+    <div class="modal-header"><h2>Dettagli Transazione</h2><button class="modal-close" onclick="closeModal('receipt')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div style="text-align:center; margin-bottom:24px;">
+      <div class="tx-icon" style="margin:0 auto 16px; width:64px; height:64px; border-radius:16px;" id="receiptIcon"></div>
+      <h3 style="font-size:24px; font-weight:700;" id="receiptAmount"></h3>
+      <p class="muted" style="font-size:14px;" id="receiptName"></p>
+    </div>
+    <div style="background:var(--surface-2); padding:16px; border-radius:12px; margin-bottom:24px;">
+      <div class="receipt-item"><span class="receipt-label">Stato</span><span class="receipt-value" style="color:var(--success)">Completata</span></div>
+      <div class="receipt-item"><span class="receipt-label">Data</span><span class="receipt-value" id="receiptDate"></span></div>
+      <div class="receipt-item"><span class="receipt-label">ID Transazione</span><span class="receipt-value" id="receiptId"></span></div>
+      <div class="receipt-item"><span class="receipt-label">Metodo</span><span class="receipt-value">Conto Slate</span></div>
+    </div>
+    <button class="btn-primary" onclick="showToast('Download PDF avviato'); closeModal('receipt')">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Scarica Ricevuta PDF
+    </button>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="app.js"></script>
+</body>
+</html>
