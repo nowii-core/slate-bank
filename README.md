@@ -51,7 +51,8 @@ With no build system required for basic development, Slate provides a simple sta
 <!-- Replace the path below with your actual screenshot filename. -->
 
 <p align="center">
-  <img src="screenshot.png" alt="Slate application preview" width="900">
+  <img src="graphic-1.png" alt="Slate application preview" width="900">
+  <img src="graphic-2.png" alt="Slate application preview" width="900">
 </p>
 
 > **Live Demo:** https://nowii-core.github.io/slate-bank/slate-bank/
